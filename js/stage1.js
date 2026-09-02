@@ -28,41 +28,43 @@ if (tackButton) {
 
 // 3. SPA CALCULATIONS & INLINE FEEDBACK PANEL
 function calculateSpaExamScore() {
-  // Read current telemetry directly from the global state tracking container
-  const bLat = window.globalSimulationData.boatLat || (window.globalSimulationData.ILCA && window.globalSimulationData.ILCA.lat);
-  const bLng = window.globalSimulationData.boatLng || (window.globalSimulationData.ILCA && window.globalSimulationData.ILCA.lng);
-  const mLat = window.globalSimulationData.windwardMarkLat;
-  const mLng = window.globalSimulationData.windwardMarkLon;
+  // Ensure the global data object exists before running math to prevent breaking the script
+  if (!window.globalSimulationData || !window.globalSimulationData.ILCA) {
+    console.error("Simulation data object or ILCA object not found on window.");
+    return;
+  }
+
+  // Read current telemetry using your exact verified keys
+  const bLat = window.globalSimulationData.ILCA.lat;
+  const bLng = window.globalSimulationData.ILCA.lon;
+  const mLat = window.globalSimulationData.targetLat;
+  const mLng = window.globalSimulationData.targetLon;
   
+  // Safety check if telemetry values are missing
+  if (bLat == null || bLng == null || mLat == null || mLng == null) {
+    console.error("Telemetry error: Missing coordinates for boat or target mark.", { bLat, bLng, mLat, mLng });
+    alert("Error reading simulation telemetry coordinates. Please restart.");
+    return;
+  }
+
   const twd = window.globalSimulationData.trueWindDirection || window.globalSimulationData.windDirection || 0;
   const twa = window.globalSimulationData.targetWindAngle || 45;
 
-  // --- A. Haversine Distance Formula: Get total distance to the windward mark ---
-  const R = 6371000; // Earth's radius in meters
-  const dLat = (mLat - bLat) * Math.PI / 180;
-  const dLon = (mLng - bLng) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(bLat * Math.PI / 180) * Math.cos(mLat * Math.PI / 180) * 
-            Math.sin(dLon/2) * Math.sin(dLon/2);
-  const distanceToMark = R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+  // 1. Get exact metric distance to the mark using Leaflet's built-in tool
+  const distanceToMark = L.latLng(bLat, bLng).distanceTo(L.latLng(mLat, mLng));
 
-  // --- B. Bearing Geometry: Find angles relative to the downwind axis ---
-  const y = Math.sin(dLon) * Math.cos(mLat * Math.PI / 180);
-  const x = Math.cos(bLat * Math.PI / 180) * Math.sin(mLat * Math.PI / 180) - 
-            Math.sin(bLat * Math.PI / 180) * Math.cos(mLat * Math.PI / 180) * Math.cos(dLon);
-  const bearingToMark = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+  // 2. Simple flat-grid bearing from the mark to the boat
+  const bearingToBoat = (Math.atan2(bLng - mLng, bLat - mLat) * 180 / Math.PI + 360) % 360;
   
-  const bearingFromMarkToBoat = (bearingToMark + 180) % 360;
-  const downwindAxis = (twd + 180) % 360;
-  
-  let diff = Math.abs(bearingFromMarkToBoat - downwindAxis) % 360;
-  const degreesOffCenter = diff > 180 ? 360 - diff : diff;
+  // 3. Find how many degrees the boat is off the wind center axis
+  let degreesOffCenter = Math.abs(bearingToBoat - twd) % 360;
+  if (degreesOffCenter > 180) degreesOffCenter = 360 - degreesOffCenter;
 
-  // --- C. Cross-Track Distance: Calculate metric distance error from the layline ---
+  // 4. Calculate how far the boat is from the target layline angle (in meters)
   const angularError = Math.abs(degreesOffCenter - twa);
   const distanceToLayline = distanceToMark * Math.sin(angularError * Math.PI / 180);
 
-  // --- D. Resolve the Result Text Strings ---
+  // --- Resolve the Result Text Strings ---
   let titleText = "";
   let messageText = "";
   let alertClass = "";
@@ -81,17 +83,15 @@ function calculateSpaExamScore() {
     alertClass = "alert-danger";
   }
 
-  // --- E. SPA Injector: Render or refresh the custom DIV panel directly onto the screen ---
+  // --- SPA Injector: Render or refresh the custom DIV panel directly onto the screen ---
   let feedbackDiv = document.getElementById("spaFeedbackPanel");
   if (!feedbackDiv) {
     feedbackDiv = document.createElement("div");
     feedbackDiv.id = "spaFeedbackPanel";
-    // Appends right into your layout container next to the buttons
     const controlsParent = document.getElementById("divStart") || document.body;
     controlsParent.appendChild(feedbackDiv);
   }
 
-  // Render the panel with layout matches to your original capsize panel layout
   feedbackDiv.style.display = "block";
   feedbackDiv.style.marginTop = "15px";
   feedbackDiv.style.width = "100%";

@@ -72,7 +72,7 @@ windwardMarkLon: 121.401286,
     vmg: 0,
     clinometer: 0,
     slowMotionFactor: 3,
-    targetLat: 13.670464,   
-    targetLon: 121.401286,
+    targetLat: 0,   
+    targetLon: 0,
   }
 };

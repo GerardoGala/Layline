@@ -345,7 +345,7 @@ const WindVaneControl = L.Control.extend({
 
   // 2. EXPOSE TO THE WORLD: Save to global window space so stage1.js can read it
   window.globalSimulationData.targetLat = targetCoordinates[0];
-  window.globalSimulationData.targetLong = targetCoordinates[1];
+  window.globalSimulationData.targetLon = targetCoordinates[1];
   
   // 3. DEBUG BUOY: Your exact working SVG code modified to draw a blue Target Mark
   const targetBuoySVG = `
