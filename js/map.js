@@ -74,19 +74,6 @@ export function initMap() {
   const metersPerLngDegree = 111320 * Math.cos(windwardMarkLat * Math.PI / 180);
   const halfLineWidthMeters = 400; // 800m total width / 2
   const lngDisplacement = halfLineWidthMeters / metersPerLngDegree;
-
-
-
-
-
-
-
-
-
-
-
-
-
   // ⚡ THE CRITICAL FIX: Forces Leaflet to recalculate bounds and redraw hidden vectors
   setTimeout(() => {
     map.invalidateSize();
@@ -259,8 +246,67 @@ const WindVaneControl = L.Control.extend({
   map.fitBounds(bounds, {
     padding: [50, 50]
   });
+
+  
+
+  // ==========================================================================
+  // ADDING PORT & STARBOARD LAYLINES
+  // ==========================================================================
+  
+  // Helper: Computes a [lat, lng] destination coordinate given distance and bearing
+  function getDestinationLatLng(startLat, startLng, distanceMeters, bearingDegrees) {
+    const R = 6378137; // Earth's radius in meters
+    const brng = (bearingDegrees * Math.PI) / 180;
+    const lat1 = (startLat * Math.PI) / 180;
+    const lon1 = (startLng * Math.PI) / 180;
+
+    const lat2 = Math.asin(
+      Math.sin(lat1) * Math.cos(distanceMeters / R) +
+      Math.cos(lat1) * Math.sin(distanceMeters / R) * Math.cos(brng)
+    );
+    const lon2 = lon1 + Math.atan2(
+      Math.sin(brng) * Math.sin(distanceMeters / R) * Math.cos(lat1),
+      Math.cos(distanceMeters / R) - Math.sin(lat1) * Math.sin(lat2)
+    );
+
+    return [(lat2 * 180) / Math.PI, (lon2 * 180) / Math.PI];
+  }
+
+  // Extract wind data (fallback to 0° North wind, 45° standard upwind target angle if missing)
+  const twd = window.globalSimulationData.trueWindDirection || 0; 
+  const twa = window.globalSimulationData.targetWindAngle || 45; 
+  const laylineLength = 2000; // Extension distance away from the buoy in meters
+
+  // Wind blows TO a direction, so lines extend downwind: TWD + 180
+  const starboardBearing = (twd + 180 - twa + 360) % 360;
+  const portBearing = (twd + 180 + twa) % 360;
+
+  // Compute endpoints from the Windward Mark
+  const starboardEnd = getDestinationLatLng(windwardMarkLat, windwardMarkLon, laylineLength, starboardBearing);
+  const portEnd = getDestinationLatLng(windwardMarkLat, windwardMarkLon, laylineLength, portBearing);
+
+  // Render Starboard Layline (Sailing standard: Starboard tack yields right-of-way, colored Green)
+  const starboardLayline = L.polyline([[windwardMarkLat, windwardMarkLon], starboardEnd], {
+    color: '#2ecc71',   // Green
+    weight: 2.5,
+    dashArray: '8, 8',   // Dashed appearance
+    opacity: 0.85
+  }).addTo(map);
+
+  // Render Port Layline (Sailing standard: Port tack keeps clear, colored Red)
+  const portLayline = L.polyline([[windwardMarkLat, windwardMarkLon], portEnd], {
+    color: '#e74c3c',   // Red
+    weight: 2.5,
+    dashArray: '8, 8',
+    opacity: 0.85
+  }).addTo(map);
+
   return map;
 }
+
+
+
+
 
 // ============================================================================
 // Refresh ILCA STATUS control
