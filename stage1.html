@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Layline | San Juan Academy</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+  <!-- 1. External Framework First (Loaded from fast global CDN servers) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Examiner</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
@@ -18,42 +21,33 @@
   <script type="module" src="js/ilcaHandleControls.js"></script>
   <script type="module" src="js/ilcaMap.js"></script>
 
-    	<!-- 2. Your Personal Custom CSS Last (Overrides everything above safely) -->
-  	<link rel="stylesheet" href="css/style.css">
+  <!-- 3. Your Personal Custom CSS Last (Overrides everything above safely) -->
+  <link rel="stylesheet" href="css/style.css">
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link rel="manifest" href="favicon/site.webmanifest">
-
-
-<meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
 </head>
-<body>
   <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem; border-radius: 4px;">
     <h2>San Juan Academy</h2>
   </div>
 
-  <div class="container">
-    <div id="map"                style="flex: 6;">
-    </div>
-</div>
+  <section>
+ 
 
-  
-  <div class="control-row" style="position: fixed; top: 95%; left: 50%; transform: translateX(-50%); z-index: 9999;">
-      <button id="startExamBtn">Start</button>
+
+  <div id="map" >
   </div>
 
-  <script>
-    // Map start simulation button logic
-    const startExamBtn = document.getElementById('startExamBtn');
-      if (startExamBtn) {
-        startExamBtn.addEventListener('click', () => {
-          launchSimulation();
-          startExamBtn.style.display = 'none';
-       });
-    }
-  </script>
+
+<div id="divStart" class="d-flex flex-column align-items-center justify-content-start w-100">
+    <button id="startButton" class="btn btn-success btn-lg px-5 mb-3">Start</button>
+    <button id="tackButton" class="btn btn-primary btn-lg px-5 mb-3 d-none">Tack</button>
+    <button id="stopButton" class="btn btn-danger btn-lg px-5 mb-3 d-none">Stop</button>
+</div>
 
 
-</body>
+</section>
+     <script src="js/stage1.js"></script>
 </html>

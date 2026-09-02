@@ -46,7 +46,7 @@ export function startWindShiftEngine() {
 
     elapsedTime = 0;
 
-    const FORCE_STATIC_NORTH = false; 
+    const FORCE_STATIC_NORTH = true; 
     
     // Pulls the slow-motion coefficient factor straight from your hardcoded configuration
     const windSlowFactor = window.globalSimulationData?.slowMotionFactor || 1;
