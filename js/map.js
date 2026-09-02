@@ -75,31 +75,13 @@ export function initMap() {
   const halfLineWidthMeters = 400; // 800m total width / 2
   const lngDisplacement = halfLineWidthMeters / metersPerLngDegree;
 
-  // Calculate the left (West) and right (East) anchors of the finish line channel
-  const finishLeftPinLon = windwardMarkLon - lngDisplacement;
-  const finishRightPinLon = windwardMarkLon + lngDisplacement;
 
-  // 🛠️ REPLACEMENT BUOYS: Clear out old single markers and drop the two boundary buoys
-  // Note: If you want to keep the original windward marker visible in the exact center, 
-  // you can uncomment it or leave it as is.
-  const finishLeftMarker = L.marker([windwardMarkLat, finishLeftPinLon], { icon: buoyIcon })
-    .addTo(map);
-  const finishRightMarker = L.marker([windwardMarkLat, finishRightPinLon], { icon: buoyIcon })
-    .addTo(map);
 
-  // --- 3. Draw the Green Finish Line Gate (Centered across 900 meters) ---
-  const finishLineCoordinates = [
-    [windwardMarkLat, finishLeftPinLon],  // Left Side Boundary Pin (West)
-    [windwardMarkLat, finishRightPinLon]  // Right Side Boundary Pin (East)
-  ];
 
-  L.polyline(finishLineCoordinates, {
-    color: '#22c55e',       // Bright Green
-    weight: 5,              // Clean visible line thickness
-    dashArray: '8, 8',      // Maritime dashed line pattern
-    opacity: 0.95,
-    pane: 'overlayPane'
-  }).addTo(map);
+
+
+
+
 
 
 
