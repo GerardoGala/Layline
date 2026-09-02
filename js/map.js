@@ -384,14 +384,25 @@ const WindVaneControl = L.Control.extend({
 // Position: TOP-LEFT
 // ============================================================================
 export function updateILCAControl() {
-
   if (!ilcaControlDiv) return;
-
   if (window.globalSimulationData.raceFinished) return;
+  const ilca = window.globalSimulationData.ILCA || {};
 
+  const bLat = window.globalSimulationData.ILCA.lat;
+  const bLng = window.globalSimulationData.ILCA.lon;
+  const mLat = window.globalSimulationData.targetLat;
+  const mLng = window.globalSimulationData.targetLon;
 
-  const ilca =
-    window.globalSimulationData.ILCA || {};
+  // 2. Only run the calculation if we have valid coordinates for both points
+  if (bLat != null && bLng != null && mLat != null && mLng != null) {
+    
+    // 3. Leaflet handles the entire distance calculation in one clean step
+    const distance = L.latLng(bLat, bLng).distanceTo(L.latLng(mLat, mLng));
+
+    // 4. EXPOSE TO THE WORLD: Save it directly to your global variable
+    window.globalSimulationData.distanceToLayline = distance;
+  }
+  
 
 
   const speedKnots =

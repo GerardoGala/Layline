@@ -49,37 +49,24 @@ function calculateSpaExamScore() {
 
   const twd = window.globalSimulationData.trueWindDirection || window.globalSimulationData.windDirection || 0;
   const twa = window.globalSimulationData.targetWindAngle || 45;
-
-  // 1. Get exact metric distance to the mark using Leaflet's built-in tool
-  const distanceToMark = L.latLng(bLat, bLng).distanceTo(L.latLng(mLat, mLng));
-
-  // 2. Simple flat-grid bearing from the mark to the boat
-  const bearingToBoat = (Math.atan2(bLng - mLng, bLat - mLat) * 180 / Math.PI + 360) % 360;
-  
-  // 3. Find how many degrees the boat is off the wind center axis
-  let degreesOffCenter = Math.abs(bearingToBoat - twd) % 360;
-  if (degreesOffCenter > 180) degreesOffCenter = 360 - degreesOffCenter;
-
-  // 4. Calculate how far the boat is from the target layline angle (in meters)
-  const angularError = Math.abs(degreesOffCenter - twa);
-  const distanceToLayline = distanceToMark * Math.sin(angularError * Math.PI / 180);
+  const dtl = window.globalSimulationData.distanceToLayline;
 
   // --- Resolve the Result Text Strings ---
   let titleText = "";
   let messageText = "";
   let alertClass = "";
 
-  if (distanceToLayline <= 20.0) {
+  if (dtl <= 20.0) {
     titleText = "Congratulations! 🎉";
-    messageText = `Excellent sailing execution! You hit the upwind layline accurately within ${distanceToLayline.toFixed(1)} meters.`;
+    messageText = `Excellent sailing execution! You hit the upwind layline accurately within ${dtl.toFixed(1)} meters.`;
     alertClass = "alert-success";
-  } else if (degreesOffCenter < twa) {
+  } else if (dtl > twa) {
     titleText = "Exam Failed ❌";
-    messageText = `You tacked too early! You were short of the target layline track corridor by ${distanceToLayline.toFixed(1)} meters. Please try again.`;
+    messageText = `You tacked too early! You were short of the target layline track corridor by ${dtl.toFixed(1)} meters. Please try again.`;
     alertClass = "alert-danger";
   } else {
     titleText = "Exam Failed ❌";
-    messageText = `You tacked too late! You overstood the layline by ${distanceToLayline.toFixed(1)} meters. Please try again.`;
+    messageText = `You tacked too late! You overstood the layline by ${dtl.toFixed(1)} meters. Please try again.`;
     alertClass = "alert-danger";
   }
 

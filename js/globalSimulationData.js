@@ -74,5 +74,6 @@ windwardMarkLon: 121.401286,
     slowMotionFactor: 3,
     targetLat: 0,   
     targetLon: 0,
+    distanceToLayline: 0
   }
 };
