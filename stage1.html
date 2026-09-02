@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wind Shifts | San Juan Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+
+  <!-- STEP 1: Load Core Map Engines & Global Variables First -->
+  <script src="js/globalSimulationData.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+ 
+  <!-- STEP 2: Load Your Core Simulator Engine Layouts -->
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/ilcaHandleControls.js"></script>
+  <script type="module" src="js/ilcaMap.js"></script>
+
+    	<!-- 2. Your Personal Custom CSS Last (Overrides everything above safely) -->
+  	<link rel="stylesheet" href="css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
+</head>
+<body>
+  <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem; border-radius: 4px;">
+    <h2>San Juan Academy</h2>
+  </div>
+
+  <div class="container">
+    <div id="map"                style="flex: 6;">
+    </div>
+</div>
+
+  
+  <div class="control-row" style="position: fixed; top: 95%; left: 50%; transform: translateX(-50%); z-index: 9999;">
+      <button id="startExamBtn">Start</button>
+  </div>
+
+  <script>
+    // Map start simulation button logic
+    const startExamBtn = document.getElementById('startExamBtn');
+      if (startExamBtn) {
+        startExamBtn.addEventListener('click', () => {
+          launchSimulation();
+          startExamBtn.style.display = 'none';
+       });
+    }
+  </script>
+
+
+</body>
+</html>
