@@ -63,8 +63,8 @@ export function initMap() {
   L.control.scale().addTo(map);
 
   // --- 1. Base Mark Setup ---
-  //const windwardMarker = L.marker([windwardMarkLat, windwardMarkLon], { icon: buoyIcon })
-  //  .addTo(map);
+  const windwardMarker = L.marker([windwardMarkLat, windwardMarkLon], { icon: buoyIcon })
+    .addTo(map);
   const leewardMarker = L.marker([leewardMarkLat, leewardMarkLon], { icon: buoyIcon })
     .addTo(map);
 
