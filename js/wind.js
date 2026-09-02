@@ -1,4 +1,20 @@
-// js/wind.js
+// js/wind.
+
+// --- At the very top of wind.js ---
+
+// 1. Check the browser address bar on page load
+const isStage3 = window.location.pathname.includes("stage3.html");
+
+// 2. Dynamically set your constraint variable based on the page environment
+// If Stage 3: false (wind shifts dynamically). If Stage 1 or 2: true (wind stays static).
+const FORCE_STATIC_NORTH = !isStage3; 
+
+// 3. EXPOSE TO THE WORLD (Optional but highly recommended)
+// This lets map.js or app.js read whether wind shifting is currently active
+window.globalSimulationData.isWindShiftingActive = isStage3;
+
+console.log(`[Wind Engine Initialized] Shifting active: ${isStage3}, Force Static North: ${FORCE_STATIC_NORTH}`);
+
 
 // Permanent training wind
 export let baseWindSpeedMS = 5.14; // 10 knots
@@ -46,7 +62,7 @@ export function startWindShiftEngine() {
 
     elapsedTime = 0;
 
-    const FORCE_STATIC_NORTH = true; 
+    //const FORCE_STATIC_NORTH = true; 
     
     // Pulls the slow-motion coefficient factor straight from your hardcoded configuration
     const windSlowFactor = window.globalSimulationData?.slowMotionFactor || 1;
