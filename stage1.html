@@ -44,10 +44,18 @@
 <div id="divStart" class="d-flex flex-column align-items-center justify-content-start w-100">
     <button id="startButton" class="btn btn-success btn-lg px-5 mb-3">Start</button>
     <button id="tackButton" class="btn btn-primary btn-lg px-5 mb-3 d-none">Tack</button>
-    <button id="stopButton" class="btn btn-danger btn-lg px-5 mb-3 d-none">Stop</button>
+</div>
+</section>
+<!-- 🏆 The SPA Feedback Panel (Hidden by default using 'd-none') -->
+<div id="feedbackOverlay" class="d-none position-fixed top-50 start-50 translate-middle bg-white p-5 rounded-4 shadow-lg text-center" style="z-index: 1050; min-width: 350px; border: 3px solid #dee2e6;">
+    <h2 id="feedbackTitle" class="fw-bold mb-3">Exam Result</h2>
+    <p id="feedbackMessage" class="fs-5 text-muted mb-4">Feedback text goes here...</p>
+    
+    <!-- Action buttons inside the SPA layout -->
+    <button id="retryButton" class="btn btn-warning btn-lg px-4 me-2">Try Again</button>
+    <button id="nextStageButton" class="btn btn-success btn-lg px-4 d-none">Next Stage</button>
 </div>
 
 
-</section>
      <script src="js/stage1.js"></script>
 </html>

@@ -301,8 +301,79 @@ const WindVaneControl = L.Control.extend({
     opacity: 0.85
   }).addTo(map);
 
+
+  // ==========================================================================
+  // DEBUGGABLE INTERSECTION TARGET (Using Known Working Buoy Code)
+  // ==========================================================================
+  
+  // Helper: Converts degrees to radians and back
+  const toRad = deg => (deg * Math.PI) / 180;
+
+  function getTargetIntersection(lat1, lon1, brng1, lat2, lon2, brng2) {
+    const latMid = toRad((lat1 + lat2) / 2);
+    const metersPerLatDegree = 111132;
+    const metersPerLonDegree = 111132 * Math.cos(latMid);
+
+    // Convert geographic coordinates to local meters relative to Leeward
+    const x1 = 0, y1 = 0;
+    const x2 = (lon2 - lon1) * metersPerLonDegree;
+    const y2 = (lat2 - lat1) * metersPerLatDegree;
+
+    // Convert bearings (0° North, Clockwise) to math standard radians (0° East, CCW)
+    const rad1 = toRad((450 - brng1) % 360);
+    const rad2 = toRad((450 - brng2) % 360);
+
+    const m1 = Math.tan(rad1);
+    const m2 = Math.tan(rad2);
+
+    // Algebraic intersection solver
+    const intersectX = (y2 - y1 - m2 * x2 + m1 * x1) / (m1 - m2);
+    const intersectY = y1 + m1 * (intersectX - x1);
+
+    // Convert back to global Lat/Lng degrees
+    const intersectLat = lat1 + (intersectY / metersPerLatDegree);
+    const intersectLng = lon1 + (intersectX / metersPerLonDegree);
+
+    return [intersectLat, intersectLng];
+  }
+
+  // 1. Calculate the exact intersection point coordinates
+  const targetCoordinates = getTargetIntersection(
+    leewardMarkLat, leewardMarkLon, 45, // Starboard Close-Hauled track angle
+    windwardMarkLat, windwardMarkLon, 135 // Port Layline angle extending from buoy
+  );
+
+  // 2. EXPOSE TO THE WORLD: Save to global window space so stage1.js can read it
+  window.globalSimulationData.targetLat = targetCoordinates[0];
+  window.globalSimulationData.targetLong = targetCoordinates[1];
+  
+  // 3. DEBUG BUOY: Your exact working SVG code modified to draw a blue Target Mark
+  const targetBuoySVG = `
+    <svg xmlns="http://w3.org" width="48" height="48" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="20" fill="#3498db" stroke="#2980b9" stroke-width="4"/>
+      <circle cx="24" cy="24" r="8" fill="#2980b9" opacity="0.6"/>
+    </svg>
+  `;
+
+  const targetBuoyIcon = L.icon({
+    iconUrl: "data:image/svg+xml;base64," + btoa(buoySVG),
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [0, -10]
+  });
+
+  // 4. Plot the Target Marker using your proven marker engine
+  L.marker(targetCoordinates, { icon: targetBuoyIcon })
+    .addTo(map)
+    .bindPopup("<b>Target Layline Intersection</b><br>Tack within 20m of this buoy!")
+    .openPopup(); // Opens automatically on load so you see it instantly
+
+  // --- End of Map Setup ---
   return map;
 }
+
+
+  
 
 
 

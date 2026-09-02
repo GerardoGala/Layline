@@ -1,185 +1,110 @@
-/**
- * stage1.js - San Juan Academy Sailing Simulator
- * Core logic for Managing Simulation States, Leaflet Layline Renders,
- * and Student Performance Evaluations.
- */
-
-// UI DOM Element Selections
+// Grab HTML UI Layout Elements
 const startButton = document.getElementById("startButton");
 const tackButton = document.getElementById("tackButton");
-const stopButton = document.getElementById("stopButton");
 
-// Local variable state container for the animation frame reference
-let animationFrameId = null;
-
-/**
- * ============================================================================
- * 1. UI STATE CONTROLLERS
- * ============================================================================
- * Safely cycles visibility states using Bootstrap's display utilities.
- */
-
-function setUItoRunningState() {
-    // Hide Start
-    startButton.classList.add("d-none");
-    // Show Tack and Stop
-    tackButton.classList.remove("d-none");
-    stopButton.classList.remove("d-none");
-}
-
-function setUItoStoppedState() {
-    // Show Start
-    startButton.classList.remove("d-none");
-    // Hide Tack and Stop
-    tackButton.classList.add("d-none");
-    stopButton.classList.add("d-none");
-}
-
-/**
- * ============================================================================
- * 2. CORE SIMULATION LIFECYCLE MANAGEMENT
- * ============================================================================
- */
-
-function handleStartSimulation() {
-    if (window.globalSimulationData.isRunning) return;
-
-    window.globalSimulationData.isRunning = true;
-    setUItoRunningState();
-
-    // Reset boat vectors back to the starting line layout
-    if (typeof resetBoatToStart === "function") {
-        resetBoatToStart();
-    }
-
-    // Fire the core physics/engine trigger inside map layers
-    if (typeof launchSimulation === "function") {
-        launchSimulation();
-    }
-
-    // Initialize animation ticker loop
-    animationFrameId = requestAnimationFrame(simulationLoop);
-}
-
-function handleStopAndJudgeSimulation() {
-    if (!window.globalSimulationData.isRunning) return;
-
-    window.globalSimulationData.isRunning = false;
-    setUItoStoppedState();
-
-    // Kill active render frame sequences smoothly
-    if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-    }
-
-    // Evaluate student performance boundaries
-    const evaluationResult = evaluateStudentPerformance();
-
-    // Commit metrics to local storage for feedback.html processing
-    localStorage.setItem("simulationResult", evaluationResult.status); // "passed", "early", "late", "overstood"
-    localStorage.setItem("simulationMessage", evaluationResult.message);
-    localStorage.setItem("currentStage", window.globalSimulationData.stage || "1");
-
-    // Route student straight to feedback matrix dashboard
-    window.location.href = "feedback.html";
-}
-
-function handleTackAction() {
-    // Check if simulation is active before consuming events
-    if (!window.globalSimulationData.isRunning) return;
+// 1. START SIMULATION ENGINE
+if (startButton) {
+  startButton.addEventListener("click", () => {
+    startButton.classList.add("d-none");    // Hide Start Button
+    tackButton.classList.remove("d-none"); // Show Tack Button
     
-    console.log("Tack executed by user.");
-    // Insert your code here to toggle boat sailing angles relative to the wind vectors
-    if (typeof executeBoatTack === "function") {
-        executeBoatTack();
-    }
+    // Hide feedback box if it was visible from a previous run
+    const existingPanel = document.getElementById("spaFeedbackPanel");
+    if (existingPanel) existingPanel.style.display = "none";
+
+    window.launchSimulation(); // 🚀 Sets launched = true inside app.js
+  });
 }
 
-/**
- * Main game/simulation step function tracking frame ticks.
- */
-function simulationLoop() {
-    if (!window.globalSimulationData.isRunning) return;
+// 2. TACK BUTTON: Freeze physics instantly and grade the student
+if (tackButton) {
+  tackButton.addEventListener("click", () => {
+    window.stopSimulation(); // 🛑 Sets launched = false inside app.js (Freezes physics)
+    tackButton.classList.add("d-none"); // Hide Tack Button
 
-    // Execute standard physics tracking frames
-    if (typeof gameLoop === "function") {
-        gameLoop();
-    }
-
-    // Dynamic layline updates if true wind changes positions
-    if (typeof updateLaylines === "function") {
-        updateLaylines();
-    }
-
-    animationFrameId = requestAnimationFrame(simulationLoop);
+    calculateSpaExamScore(); // 📊 Run calculations and render results inline
+  });
 }
 
-/**
- * ============================================================================
- * 3. SAILING LAYLINE MATH EVALUATION LOGIC
- * ============================================================================
- * Calculates cross-track errors and angle corridors to judge if the
- * student tacked precisely on the boundaries or missed the window.
- */
-function evaluateStudentPerformance() {
-    // Fallbacks if data properties are empty
-    const currentLat = window.globalSimulationData.boatLat || 13.670464;
-    const currentLng = window.globalSimulationData.boatLng || 121.401286;
-    
-    const windwardLat = window.globalSimulationData.windwardMarkLat || 13.671812;
-    const windwardLng = window.globalSimulationData.windwardMarkLon || 121.401286;
-    
-    const twd = window.globalSimulationData.trueWindDirection || 0;
-    const twa = window.globalSimulationData.targetWindAngle || 45;
+// 3. SPA CALCULATIONS & INLINE FEEDBACK PANEL
+function calculateSpaExamScore() {
+  // Read current telemetry directly from the global state tracking container
+  const bLat = window.globalSimulationData.boatLat || (window.globalSimulationData.ILCA && window.globalSimulationData.ILCA.lat);
+  const bLng = window.globalSimulationData.boatLng || (window.globalSimulationData.ILCA && window.globalSimulationData.ILCA.lng);
+  const mLat = window.globalSimulationData.windwardMarkLat;
+  const mLng = window.globalSimulationData.windwardMarkLon;
+  
+  const twd = window.globalSimulationData.trueWindDirection || window.globalSimulationData.windDirection || 0;
+  const twa = window.globalSimulationData.targetWindAngle || 45;
 
-    // Compute standard geographic bearing from boat location straight to the Windward Mark
-    const dLng = (windwardLng - currentLng) * Math.PI / 180;
-    const lat1 = currentLat * Math.PI / 180;
-    const lat2 = windwardLat * Math.PI / 180;
+  // --- A. Haversine Distance Formula: Get total distance to the windward mark ---
+  const R = 6371000; // Earth's radius in meters
+  const dLat = (mLat - bLat) * Math.PI / 180;
+  const dLon = (mLng - bLng) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(bLat * Math.PI / 180) * Math.cos(mLat * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  const distanceToMark = R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 
-    const y = Math.sin(dLng) * Math.cos(lat2);
-    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
-    
-    // Bearing values normalized safely to standard 0-360 tracking dimensions
-    let bearingToMark = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+  // --- B. Bearing Geometry: Find angles relative to the downwind axis ---
+  const y = Math.sin(dLon) * Math.cos(mLat * Math.PI / 180);
+  const x = Math.cos(bLat * Math.PI / 180) * Math.sin(mLat * Math.PI / 180) - 
+            Math.sin(bLat * Math.PI / 180) * Math.cos(mLat * Math.PI / 180) * Math.cos(dLon);
+  const bearingToMark = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+  
+  const bearingFromMarkToBoat = (bearingToMark + 180) % 360;
+  const downwindAxis = (twd + 180) % 360;
+  
+  let diff = Math.abs(bearingFromMarkToBoat - downwindAxis) % 360;
+  const degreesOffCenter = diff > 180 ? 360 - diff : diff;
 
-    // Calculate structural layline target bearings extending out from the mark downwind
-    const idealStarboardLayline = (twd + 180 - twa + 360) % 360;
-    const idealPortLayline = (twd + 180 + twa) % 360;
+  // --- C. Cross-Track Distance: Calculate metric distance error from the layline ---
+  const angularError = Math.abs(degreesOffCenter - twa);
+  const distanceToLayline = distanceToMark * Math.sin(angularError * Math.PI / 180);
 
-    // Allowable cushion tolerance zone window in degrees
-    const toleranceDegrees = 3.5; 
+  // --- D. Resolve the Result Text Strings ---
+  let titleText = "";
+  let messageText = "";
+  let alertClass = "";
 
-    // Compute delta variations
-    const diffStarboard = Math.abs(bearingToMark - idealStarboardLayline);
-    const diffPort = Math.abs(bearingToMark - idealPortLayline);
+  if (distanceToLayline <= 20.0) {
+    titleText = "Congratulations! 🎉";
+    messageText = `Excellent sailing execution! You hit the upwind layline accurately within ${distanceToLayline.toFixed(1)} meters.`;
+    alertClass = "alert-success";
+  } else if (degreesOffCenter < twa) {
+    titleText = "Exam Failed ❌";
+    messageText = `You tacked too early! You were short of the target layline track corridor by ${distanceToLayline.toFixed(1)} meters. Please try again.`;
+    alertClass = "alert-danger";
+  } else {
+    titleText = "Exam Failed ❌";
+    messageText = `You tacked too late! You overstood the layline by ${distanceToLayline.toFixed(1)} meters. Please try again.`;
+    alertClass = "alert-danger";
+  }
 
-    // JUDGMENT DEVIATION TREE
-    if (diffStarboard <= toleranceDegrees || diffPort <= toleranceDegrees) {
-        return {
-            status: "passed",
-            message: "Perfect tack! You hit the layline window exactly."
-        };
-    } else if (bearingToMark > idealStarboardLayline && bearingToMark < idealPortLayline) {
-        return {
-            status: "early",
-            message: "Tack failed: You tacked too early and are sailing under the layline corridor."
-        };
-    } else {
-        return {
-            status: "late",
-            message: "Tack failed: You overstood the layline, sailing extra distance unnecessarily."
-        };
-    }
+  // --- E. SPA Injector: Render or refresh the custom DIV panel directly onto the screen ---
+  let feedbackDiv = document.getElementById("spaFeedbackPanel");
+  if (!feedbackDiv) {
+    feedbackDiv = document.createElement("div");
+    feedbackDiv.id = "spaFeedbackPanel";
+    // Appends right into your layout container next to the buttons
+    const controlsParent = document.getElementById("divStart") || document.body;
+    controlsParent.appendChild(feedbackDiv);
+  }
+
+  // Render the panel with layout matches to your original capsize panel layout
+  feedbackDiv.style.display = "block";
+  feedbackDiv.style.marginTop = "15px";
+  feedbackDiv.style.width = "100%";
+  
+  feedbackDiv.innerHTML = `
+    <div class="alert ${alertClass} p-4 rounded shadow-sm text-center" style="font-family: sans-serif;">
+      <h3 class="fw-bold">${titleText}</h3>
+      <p class="mb-3 fs-6">${messageText}</p>
+      <hr>
+      <div class="d-flex gap-2 justify-content-center mt-3">
+        <button onclick="window.location.reload()" class="btn btn-dark btn-sm px-4">🔄 Try Again</button>
+        <a href="index.html" class="btn btn-outline-secondary btn-sm px-4">🏡 Main Menu</a>
+      </div>
+    </div>
+  `;
 }
-
-/**
- * ============================================================================
- * 4. EVENT LISTENER REGISTER INITIALIZATION
- * ============================================================================
- */
-document.addEventListener("DOMContentLoaded", () => {
-    if (startButton) startButton.addEventListener("click", handleStartSimulation);
-    if (stopButton) stopButton.addEventListener("click", handleStopAndJudgeSimulation);
-    if (tackButton) tackButton.addEventListener("click", handleTackAction);
-});
