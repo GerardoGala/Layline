@@ -75,6 +75,7 @@ windwardMarkLon: 121.401286,
     targetLat: 0,   
     targetLon: 0,
     distanceToLayline: 0,
-    isWindShiftingActive: 0
+    isWindShiftingActive: 0,
+    tackTimingStatus: "UNDERSTOOD"
   }
 };

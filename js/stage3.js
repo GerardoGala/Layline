@@ -41,14 +41,14 @@ function calculateSpaExamScore() {
   let buttonLayoutHtml = ""; 
 
   // 1. FIRST CHECK: Did the student pass within 20 meters?
-  if (dtl < 8.0) {
+  if (dtl < 20.0) {
     console.log("dtl", dtl)
     titleText = "Congratulations! 🎉";
     // 🎯 Hides raw distance metrics for the clean success layout
     messageText = "Excellent sailing execution! You hit the upwind layline track corridor perfectly.";
     alertClass = "alert-success";
     buttonLayoutHtml = `
-      <a href="stage2.html" class="btn btn-primary btn-sm px-4 fw-bold">Advance to Stage 2 ➡️</a>
+      <a href="stage3.html" class="btn btn-primary btn-sm px-4 fw-bold">Advance to Stage 3</a>
       <a href="index.html" class="btn btn-outline-secondary btn-sm px-4">Main Menu</a>
     `;
   } 
@@ -58,7 +58,7 @@ function calculateSpaExamScore() {
     messageText = `You tacked too early! You understood the target mark layline by ${dtl.toFixed(1)} meters. Please try again.`;
     alertClass = "alert-danger";
     buttonLayoutHtml = `
-      <button onclick="window.location.reload()" class="btn btn-dark btn-sm px-4"Try Again</button>
+      <button onclick="window.location.reload()" class="btn btn-dark btn-sm px-4">Try Again</button>
       <a href="index.html" class="btn btn-outline-secondary btn-sm px-4">Main Menu</a>
     `;
   } 
@@ -87,7 +87,7 @@ function calculateSpaExamScore() {
   
   feedbackDiv.innerHTML = `
     <div class="alert ${alertClass} p-4 rounded shadow-sm text-center" style="font-family: sans-serif; border-top: 5px solid #0d6efd;">
-      <div class="mb-2 fw-bold text-uppercase fs-6" style="color: #0d6efd; letter-spacing: 1px;">Stage 1 — Learn</div>
+      <div class="mb-2 fw-bold text-uppercase fs-6" style="color: #0d6efd; letter-spacing: 1px;">Stage 3 — Challenge</div>
       <h3 class="fw-bold mt-1">${titleText}</h3>
       <p class="mb-3 fs-6">${messageText}</p>
       <hr>

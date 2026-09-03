@@ -32,30 +32,42 @@
   <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem; border-radius: 4px;">
     <h2>San Juan Academy</h2>
   </div>
-
   <section>
- 
+    <div id="map" >
+    </div>
+    <div id="divStart" class="mt-5 d-flex flex-column align-items-center justify-content-start w-100">
+        <button id="startButton" class="btn btn-success btn-lg px-5 mb-3">Start</button>
+        <button id="tackButton" class="btn btn-primary btn-lg px-5 mb-3 d-none">Tack</button>
+    </div>
+  </section>
 
-
-  <div id="map" >
+  <div style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* Centered vertically and horizontally */
+      pointer-events: none;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-width: 250px;
+      text-align: center; /* 🎯 FIX: Centers the text inside the 250px box */
+  ">
+      <h2 style="
+          margin: 0;
+          padding: 0;
+          font-size: 1.3rem;
+          font-weight: 700;
+          color: #198754;
+      ">Stage 2 — Practice</h2>
   </div>
 
-
-<div id="divStart" class="d-flex flex-column align-items-center justify-content-start w-100">
-    <button id="startButton" class="btn btn-success btn-lg px-5 mb-3">Start</button>
-    <button id="tackButton" class="btn btn-primary btn-lg px-5 mb-3 d-none">Tack</button>
-</div>
-</section>
-<!-- 🏆 The SPA Feedback Panel (Hidden by default using 'd-none') -->
-<div id="feedbackOverlay" class="d-none position-fixed top-50 start-50 translate-middle bg-white p-5 rounded-4 shadow-lg text-center" style="z-index: 1050; min-width: 350px; border: 3px solid #dee2e6;">
-    <h2 id="feedbackTitle" class="fw-bold mb-3">Exam Result</h2>
-    <p id="feedbackMessage" class="fs-5 text-muted mb-4">Feedback text goes here...</p>
-    
-    <!-- Action buttons inside the SPA layout -->
-    <button id="retryButton" class="btn btn-warning btn-lg px-4 me-2">Try Again</button>
-    <button id="nextStageButton" class="btn btn-success btn-lg px-4 d-none">Next Stage</button>
-</div>
-
-
-     <script src="js/stage1.js"></script>
+  <!-- 🏆 The SPA Feedback Panel (Hidden by default using 'd-none') -->
+  <div id="feedbackOverlay" class="d-none position-fixed top-50 start-50 translate-middle bg-white p-5 rounded-4 shadow-lg text-center" style="z-index: 1050; min-width: 350px; border: 3px solid #dee2e6;">
+      <h2 id="feedbackTitle" class="fw-bold mb-3">Exam Result</h2>
+      <p id="feedbackMessage" class="fs-5 text-muted mb-4">Feedback text goes here...</p>
+      
+      <!-- Action buttons inside the SPA layout -->
+      <button id="retryButton" class="btn btn-warning btn-lg px-4 me-2">Try Again</button>
+      <button id="nextStageButton" class="btn btn-success btn-lg px-4 d-none">Next Stage</button>
+  </div>
+  <script src="js/stage2.js"></script>
 </html>

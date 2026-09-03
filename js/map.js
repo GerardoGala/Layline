@@ -387,6 +387,14 @@ export function updateILCAControl() {
 
     // 4. EXPOSE TO THE WORLD: Save it directly to your global variable
     window.globalSimulationData.distanceToLayline = distance;
+
+    // 5. Simple comparison: Is the boat's longitude still west (less than) the target buoy?
+    // (Assuming a starboard tack heading up and to the right toward the layline)
+    if (bLng < mLng) {
+      window.globalSimulationData.tackTimingStatus = "UNDERSTOOD";
+    } else {
+      window.globalSimulationData.tackTimingStatus = "OVERSTOOD";
+    }
   }
   
 
