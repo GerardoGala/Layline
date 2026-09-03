@@ -41,15 +41,14 @@ function calculateSpaExamScore() {
   let buttonLayoutHtml = ""; 
 
   // 1. FIRST CHECK: Did the student pass within 20 meters?
-  if (dtl < 20.0) {
+  if (dtl < 30.0) {
     console.log("dtl", dtl)
     titleText = "Congratulations! 🎉";
     // 🎯 Hides raw distance metrics for the clean success layout
     messageText = "Excellent sailing execution! You hit the upwind layline track corridor perfectly.";
     alertClass = "alert-success";
     buttonLayoutHtml = `
-      <a href="stage3.html" class="btn btn-primary btn-sm px-4 fw-bold">Advance to Stage 3</a>
-      <a href="index.html" class="btn btn-outline-secondary btn-sm px-4">Main Menu</a>
+      <a href="index.html" class="btn btn-primary btn-sm px-4">Main Menu</a>
     `;
   } 
   // 2. SECOND CHECK: If distance is 20 meters or more, inspect your custom tackTimingStatus strings
