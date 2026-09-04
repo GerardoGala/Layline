@@ -23,14 +23,7 @@ body {
 
 
 
-/* ==========================================
-   3. Layout Container 
-   ========================================== */
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 90dvh;   /*ggala adjust to fit the whole page */
-}
+
 
   /* 1. Make the input pane a flex container that fills the height */
 #input-pane {

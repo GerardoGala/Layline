@@ -35,13 +35,12 @@
   <section>
     <div id="map" >
     </div>
-    <div id="divStart" class="mt-3 d-flex flex-column align-items-center justify-content-start w-100">
+    <div id="divStart" class="mt-5 d-flex flex-column align-items-center justify-content-start w-100">
         <button id="startButton" class="btn btn-success btn-lg px-5 mb-3">Start</button>
         <button id="tackButton" class="btn btn-primary btn-lg px-5 mb-3 d-none">Tack</button>
     </div>
   </section>
 
-  <!-- Floating Stage Indicator Panel for Stage 1 -->
   <div style="
       position: absolute;
       top: 50%;
@@ -57,12 +56,24 @@
           padding: 0;
           font-size: 1.3rem;
           font-weight: 700;
-          color: #0d6efd;
-      ">Stage 1 — Learn</h2>
+          color: #198754;
+      ">Stage 2 — Practice</h2>
   </div>
+<footer class="border-top mt-5 py-1">
 
+    <div class="container text-center">
 
+        <p class="mb-1">
+            <strong>Dinghy Sailing Tutorial</strong>
+        </p>
 
+        <small class="text-body-secondary">
+            Learn • Practice • Challenge
+        </small>
+
+    </div>
+
+</footer>
   <!-- 🏆 The SPA Feedback Panel (Hidden by default using 'd-none') -->
   <div id="feedbackOverlay" class="d-none position-fixed top-50 start-50 translate-middle bg-white p-5 rounded-4 shadow-lg text-center" style="z-index: 1050; min-width: 350px; border: 3px solid #dee2e6;">
       <h2 id="feedbackTitle" class="fw-bold mb-3">Exam Result</h2>
@@ -72,5 +83,5 @@
       <button id="retryButton" class="btn btn-warning btn-lg px-4 me-2">Try Again</button>
       <button id="nextStageButton" class="btn btn-success btn-lg px-4 d-none">Next Stage</button>
   </div>
-  <script src="js/stage1.js"></script>
+  <script src="js/practice.js"></script>
 </html>

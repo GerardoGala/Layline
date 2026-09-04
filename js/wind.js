@@ -3,17 +3,17 @@
 // --- At the very top of wind.js ---
 
 // 1. Check the browser address bar on page load
-const isStage3 = window.location.pathname.includes("stage3.html");
+const isChallenge = window.location.pathname.includes("challenge.html");
 
 // 2. Dynamically set your constraint variable based on the page environment
-// If Stage 3: false (wind shifts dynamically). If Stage 1 or 2: true (wind stays static).
-const FORCE_STATIC_NORTH = !isStage3; 
+// If challenge: false (wind shifts dynamically). If learn or practice: true (wind stays static).
+const FORCE_STATIC_NORTH = !isChallenge; 
 
 // 3. EXPOSE TO THE WORLD (Optional but highly recommended)
 // This lets map.js or app.js read whether wind shifting is currently active
-window.globalSimulationData.isWindShiftingActive = isStage3;
+window.globalSimulationData.isWindShiftingActive = isChallenge;
 
-console.log(`[Wind Engine Initialized] Shifting active: ${isStage3}, Force Static North: ${FORCE_STATIC_NORTH}`);
+console.log(`[Wind Engine Initialized] Shifting active: ${isChallenge}, Force Static North: ${FORCE_STATIC_NORTH}`);
 
 
 // Permanent training wind

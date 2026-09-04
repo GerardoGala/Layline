@@ -252,7 +252,7 @@ const WindVaneControl = L.Control.extend({
   // ==========================================================================
   // ADDING PORT & STARBOARD LAYLINES
   // ==========================================================================
-  if (window.location.pathname.includes("stage1.html")) {
+  if (window.location.pathname.includes("learn.html")) {
     // Helper: Computes a [lat, lng] destination coordinate given distance and bearing
     function getDestinationLatLng(startLat, startLng, distanceMeters, bearingDegrees) {
       const R = 6378137; // Earth's radius in meters
@@ -344,7 +344,7 @@ const WindVaneControl = L.Control.extend({
     windwardMarkLat, windwardMarkLon, 135 // Port Layline angle extending from buoy
   );
 
-  // 2. EXPOSE TO THE WORLD: Save to global window space so stage1.js can read it
+  // 2. EXPOSE TO THE WORLD: Save to global window space so learn.js can read it
   window.globalSimulationData.targetLat = targetCoordinates[0];
   window.globalSimulationData.targetLon = targetCoordinates[1];
   
