@@ -53,21 +53,21 @@ function calculateSpaExamScore() {
   } 
   // 2. SECOND CHECK: If distance is 20 meters or more, inspect your custom tackTimingStatus strings
   else if (timing === "UNDERSTOOD") {
-    titleText = "Exam Failed ❌";
+    titleText = "UNDERSTOOD";
     messageText = `You tacked too early! You understood the target mark layline by ${dtl.toFixed(1)} meters. Please try again.`;
     alertClass = "alert-danger";
     buttonLayoutHtml = `
-      <button onclick="window.location.reload()" class="btn btn-dark btn-sm px-4">Try Again</button>
-      <a href="index.html" class="btn btn-outline-secondary btn-sm px-4">Main Menu</a>
+      <button onclick="window.location.reload()" class="btn btn-primary btn-sm px-4">Try Again</button>
+      <a href="index.html" class="btn btn-outline-primary btn-sm px-4">Main Menu</a>
     `;
   } 
   else {
-    titleText = "Exam Failed ❌";
+    titleText = "OVERSTOOD";
     messageText = `You tacked too late! You overstood the layline by ${dtl.toFixed(1)} meters. Please try again.`;
     alertClass = "alert-danger";
     buttonLayoutHtml = `
-      <button onclick="window.location.reload()" class="btn btn-dark btn-sm px-4">Try Again</button>
-      <a href="index.html" class="btn btn-outline-secondary btn-sm px-4">Main Menu</a>
+      <button onclick="window.location.reload()" class="btn btn-primary btn-sm px-4">Try Again</button>
+      <a href="index.html" class="btn btn-outline-primary btn-sm px-4">Main Menu</a>
     `;
   }
 
@@ -86,7 +86,7 @@ function calculateSpaExamScore() {
   
   feedbackDiv.innerHTML = `
     <div class="alert ${alertClass} p-4 rounded shadow-sm text-center" style="font-family: sans-serif; border-top: 5px solid #0d6efd;">
-      <div class="mb-2 fw-bold text-uppercase fs-6" style="color: #0d6efd; letter-spacing: 1px;">Stage 3 — Challenge</div>
+      <div class="mb-2 fw-bold text-uppercase fs-6" style="color: #0d6efd; letter-spacing: 1px;">Challenge</div>
       <h3 class="fw-bold mt-1">${titleText}</h3>
       <p class="mb-3 fs-6">${messageText}</p>
       <hr>

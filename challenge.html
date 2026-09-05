@@ -49,9 +49,9 @@
 
   <div style="
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centered vertically and horizontally */
+    transform: translate(-40%, -50%); /* Centered vertically and horizontally */
     pointer-events: none;
     font-family: system-ui, -apple-system, sans-serif;
     min-width: 250px;
@@ -63,18 +63,18 @@
         font-size: 1.3rem;
         font-weight: 700;
         color: #a55d00;
-    ">Stage 3 — Challenge</h2>
+    ">Challenge</h2>
   </div>
 
 
   <!-- 🏆 The SPA Feedback Panel (Hidden by default using 'd-none') -->
   <div id="feedbackOverlay" class="d-none position-fixed top-50 start-50 translate-middle bg-white p-5 rounded-4 shadow-lg text-center" style="z-index: 1050; min-width: 350px; border: 3px solid #dee2e6;">
-      <h2 id="feedbackTitle" class="fw-bold mb-3">Exam Result</h2>
+      <h2 id="feedbackTitle" class="fw-bold mb-3">Result</h2>
       <p id="feedbackMessage" class="fs-5 text-muted mb-4">Feedback text goes here...</p>
       
       <!-- Action buttons inside the SPA layout -->
       <button id="retryButton" class="btn btn-warning btn-lg px-4 me-2">Try Again</button>
-      <button id="nextStageButton" class="btn btn-success btn-lg px-4 d-none">Next Stage</button>
+      <button id="mainMenuButton" class="btn btn-success btn-lg px-4 d-none">Main Menu</button>
   </div>
   <footer class="border-top mt-5 py-1">
     <div class="container text-center">
@@ -105,33 +105,6 @@
       // Lets the boom swing out wider (Max limit 90 degrees square)
       window.globalSimulationData.ILCA.boomAngle = Math.min(90.0, currentAngle + ANGLE_STEP);
     }
-  </script>
-
-  <script>
-
-
-    function handleSheetIn() {
-    const currentAngle = parseFloat(window.globalSimulationData.ILCA.boomAngle) || 0.0;
-    const newAngle = Math.max(0.0, currentAngle - ANGLE_STEP);
-    
-    // Save to global data
-    window.globalSimulationData.ILCA.boomAngle = newAngle;
-    
-    // Push the change to the screen text label
-    document.getElementById('boomAngleDisplay').innerText = newAngle.toFixed(1);
-  }
-
-  function handleSheetOut() {
-    const currentAngle = parseFloat(window.globalSimulationData.ILCA.boomAngle) || 0.0;
-    const newAngle = Math.min(90.0, currentAngle + ANGLE_STEP);
-    
-    // Save to global data
-    window.globalSimulationData.ILCA.boomAngle = newAngle;
-    
-    // Push the change to the screen text label
-    document.getElementById('boomAngleDisplay').innerText = newAngle.toFixed(1);
-  }
-
   </script>
 
   <script src="js/challenge.js"></script>

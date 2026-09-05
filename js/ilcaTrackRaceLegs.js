@@ -6,6 +6,11 @@ import { stopSimulation } from './app.js';
  * the exact moment the boat crosses the 900m horizontal finish line.
  */
 export function trackRaceLegs(map) {
+  // 🚫 SKIP IF THE PAGE IS "LEARN"
+  if (window.location.pathname.includes('learn')) {
+    return; // Exit the function immediately and do nothing
+  }
+
   const ilca = window.globalSimulationData.ILCA;
   const windwardLat = window.globalSimulationData.windwardMarkLat;
 
