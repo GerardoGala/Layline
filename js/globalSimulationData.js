@@ -62,7 +62,7 @@ windwardMarkLon: 121.401286,
     outhaul: "Full",              //sailing downwind at 15 knots of wind
 */
 
-    lat: 13.670464,   
+    lat: 13.670464,   // 👈 USED IN LEARN.HTML: The live, moving latitude of the boat
     lon: 121.401286,
     timer: 0,
     distanceToBuoy: 0,
@@ -72,7 +72,7 @@ windwardMarkLon: 121.401286,
     vmg: 0,
     clinometer: 0,
     slowMotionFactor: 3,
-    targetLat: 0,   
+    targetLat: 0,         // 👈 USED IN LEARN.HTML: Set by map.js as the crossing threshold
     targetLon: 0,
     distanceToLayline: 0,
     isWindShiftingActive: 0,
