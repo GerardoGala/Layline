@@ -15,13 +15,17 @@
   <script src="js/globalSimulationData.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
  
+<!-- Shared CSS -->
+<link rel="stylesheet" href="https://gerardogala.github.io/Tutorial-Shared/shared.css">
+
+
   <!-- STEP 2: Load Your Core Simulator Engine Layouts -->
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/ilcaHandleControls.js"></script>
   <script type="module" src="js/ilcaMap.js"></script>
   
-  <!-- 3. External Brand CSS Framework First -->
-  <link rel="stylesheet" href="https://gerardogala.github.io/SanJuanAcademy/css/brand.css">
+<!-- Shared CSS -->
+<link rel="stylesheet" href="https://gerardogala.github.io/Tutorial-Shared/shared.css">
 
   <!-- 4. Your Personal Custom CSS Last (Overrides everything above safely) -->
   <link rel="stylesheet" href="css/style.css">
@@ -78,6 +82,7 @@
       <!-- Action buttons inside the SPA layout -->
       <button id="retryButton" class="btn btn-warning btn-lg px-4 me-2">Try Again</button>
       <button id="mainMenuButton" class="btn btn-success btn-lg px-4 d-none">Main Menu</button>
+  </div>
   <script>
     // Inside your main input/state loop processing button clicks:
     const ANGLE_STEP = 1.5; // Smooth 1.5 degree changes per click for precise trim
