@@ -31,10 +31,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
 </head>
 <body>
-
-  <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem;">
-    <h2>San Juan Academy - Layline</h2>
-  </div>
+  <!-- Header will be injected here -->
+  <div id="header-placeholder"></div>
 
   <section>
     <div id="map"></div>
@@ -67,17 +65,6 @@
       ">Learn: Observe how the sailboat approaches the layline.</h2>
   </div>
 
-  <footer class="border-top mt-5 py-1">
-    <div class="container text-center">
-        <p class="mb-1">
-            <strong>Dinghy Sailing Tutorial</strong>
-        </p>
-        <small class="text-body-secondary">
-            Learn • Practice • Challenge
-        </small>
-    </div>
-  </footer>
-
   <!-- ========================================================================= -->
   <!-- 🟢 INSERTION POINT 1: THE FEEDBACK OVERLAY (Identical styling to practice.html) -->
   <!-- ========================================================================= -->
@@ -92,7 +79,8 @@
   <!-- ========================================================================= -->
   <!-- 🟢 INSERTION POINT 3: THE TRACKING LAYER MODULE (learn.js) -->
   <!-- ========================================================================= -->
+  <div id="footer-placeholder"></div>
+  <script src="js/layout.js"></script>
   <script src="js/learn.js"></script>
-
 </body>
 </html>

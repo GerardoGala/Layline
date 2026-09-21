@@ -31,11 +31,9 @@
   <link rel="manifest" href="favicon/site.webmanifest">
   <meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
 </head>
-<body> <!-- 🎯 Added missing body tag for cleaner HTML semantics -->
-
-  <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem;">
-    <h2>San Juan Academy - Layline</h2>
-  </div>
+<body>
+  <!-- Header will be injected here -->
+  <div id="header-placeholder"></div>
 
   <section>
     <div id="map"></div>
@@ -131,7 +129,8 @@
     });
   </script>
 
-  <!-- Load your calculations script last -->
+  <div id="footer-placeholder"></div>
+  <script src="js/layout.js"></script>
   <script src="js/practice.js"></script>
 </body>
 </html>
